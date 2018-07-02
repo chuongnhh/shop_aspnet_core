@@ -9,7 +9,15 @@ namespace Shop.Data {
     public class CategoryProduct {
         [Key]
         public int Id { get; set; }
+        [Display(Name = "Category Name")]
         public string Name { get; set; }
+        [Display(Name = "Created Date")]
+
+        public DateTime CreatedDate { get; set; }
+        [Display(Name = "Modified Date")]
+        public DateTime ModifiedDate { get; set; }
+
+        [Display(Name = "Group Product")]
 
         public int GroupProductId { get; set; }
         [ForeignKey("GroupProductId")]

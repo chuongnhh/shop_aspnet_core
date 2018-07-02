@@ -9,53 +9,55 @@ using Shop.Data;
 
 namespace Shop.Areas.Admin.Controllers {
     [Area("Admin")]
-    public class GroupProductController : Controller {
+    public class CategoryProductController : Controller {
 
         private readonly ApplicationDbContext _context;
 
-        public GroupProductController(ApplicationDbContext context) {
+        public CategoryProductController(ApplicationDbContext context) {
             _context = context;
         }
 
-        // GET: Admin/GroupProduct
+        // GET: Admin/CategoryProduct
         public async Task<IActionResult> Index() {
-            return View(await _context.GroupProducts.ToListAsync());
+            return View(await _context.CategoryProducts.Include(x => x.GroupProduct).ToListAsync());
         }
 
-        // GET: Admin/GroupProduct/Edit/5
+        // GET: Admin/CategoryProduct/Edit/5
         public async Task<IActionResult> Details(int? id) {
 
-            var model = await _context.GroupProducts.SingleOrDefaultAsync(m => m.Id == id);
+            var model = await _context.CategoryProducts.SingleOrDefaultAsync(m => m.Id == id);
 
             if (model == null) {
-                model = new GroupProduct();
+                model = new CategoryProduct();
+                ViewBag.Groups = new SelectList(_context.GroupProducts.ToList(), "Id", "Name");
                 return View(model);
             }
-
+            ViewBag.Groups = new SelectList(_context.GroupProducts.ToList(), "Id", "Name", model.GroupProductId);
             return View(model);
         }
 
-        // POST: Admin/GroupProduct/Edit/5
+        // POST: Admin/CategoryProduct/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Details(int id, [Bind("Id,Name")] GroupProduct model) {
+        public async Task<IActionResult> Details(int id, [Bind("Id,Name,GroupProductId")] CategoryProduct model) {
 
             if (ModelState.IsValid) {
-                if (GroupProductExists(id) == false) {
+                if (CategoryProductExists(id) == false) {
 
                     model.CreatedDate = DateTime.Now;
                     _context.Add(model);
                     await _context.SaveChangesAsync();
 
                 } else {
-                    var group = await _context.GroupProducts.FindAsync(id);
+                    var category = await _context.CategoryProducts.FindAsync(id);
 
-                    group.Name = model.Name;
-                    group.ModifiedDate = DateTime.Now;
+                    category.GroupProductId = model.GroupProductId;
+                    category.Name = model.Name;
+                    category.ModifiedDate = DateTime.Now;
 
-                    _context.Update(group);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
 
@@ -65,13 +67,13 @@ namespace Shop.Areas.Admin.Controllers {
         }
 
 
-        // POST: Admin/GroupProduct/Delete/5
+        // POST: Admin/CategoryProduct/Delete/5
         [HttpPost]
         public async Task<IActionResult> Delete(int id) {
-            var model = await _context.GroupProducts.SingleOrDefaultAsync(m => m.Id == id);
+            var model = await _context.CategoryProducts.SingleOrDefaultAsync(m => m.Id == id);
 
             if (model != null) {
-                _context.GroupProducts.Remove(model);
+                _context.CategoryProducts.Remove(model);
                 await _context.SaveChangesAsync();
 
                 return Json(new { success = 1 });
@@ -79,8 +81,8 @@ namespace Shop.Areas.Admin.Controllers {
             return Json(new { success = 0 });
         }
 
-        private bool GroupProductExists(int id) {
-            return _context.GroupProducts.Any(e => e.Id == id);
+        private bool CategoryProductExists(int id) {
+            return _context.CategoryProducts.Any(e => e.Id == id);
         }
     }
 }

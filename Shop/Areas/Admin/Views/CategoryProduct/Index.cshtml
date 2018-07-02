@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Shop.Data.GroupProduct>
+﻿@model IEnumerable<Shop.Data.CategoryProduct>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,7 +13,7 @@
     <!-- Default box -->
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title">List Group Product</h3>
+            <h3 class="box-title">List Category Product</h3>
         </div>
         <div class="box-body">
             <p>
@@ -22,6 +22,9 @@
             <table class="table data-table table-bordered table-hover">
                 <thead>
                     <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.GroupProductId)
+                        </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Name)
                         </th>
@@ -37,6 +40,9 @@
                 <tbody>
                     @foreach (var item in Model) {
                         <tr id="tr-item-@item.Id">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.GroupProduct.Name)
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
@@ -95,7 +101,7 @@
                 },
                 callback: function (result) {
                     if (result == true) {
-                        $.post('/admin/groupproduct/delete', { id: id }, function (data) {
+                        $.post('/admin/CategoryProduct/delete', { id: id }, function (data) {
                             if (data.success == 1) {
                                 $('#tr-item-' + id).remove();
                             }

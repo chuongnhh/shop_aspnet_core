@@ -27,6 +27,8 @@
     <![endif]-->
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+    @RenderSection("styles", required: false)
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini fixed">
@@ -78,6 +80,7 @@
             $('.sidebar-menu').tree()
         })
     </script>
+    @RenderSection("scripts", required: false)
 </body>
 
 </html>

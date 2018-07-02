@@ -11,9 +11,10 @@ using System;
 namespace Shop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180702115827_v2")]
+    partial class v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,8 +29,6 @@ namespace Shop.Migrations
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<int>("GroupProductId");
-
-                    b.Property<DateTime>("ModifiedDate");
 
                     b.Property<string>("Name");
 
@@ -47,8 +46,6 @@ namespace Shop.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<DateTime>("ModifiedDate");
-
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
@@ -56,49 +53,11 @@ namespace Shop.Migrations
                     b.ToTable("GroupProducts");
                 });
 
-            modelBuilder.Entity("Shop.Data.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("CategoryProductId");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Display");
-
-                    b.Property<string>("ImageUrl");
-
-                    b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<string>("Name");
-
-                    b.Property<double>("Price");
-
-                    b.Property<int>("Quantity");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryProductId");
-
-                    b.ToTable("Products");
-                });
-
             modelBuilder.Entity("Shop.Data.CategoryProduct", b =>
                 {
                     b.HasOne("Shop.Data.GroupProduct", "GroupProduct")
                         .WithMany("CategoryProducts")
                         .HasForeignKey("GroupProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Shop.Data.Product", b =>
-                {
-                    b.HasOne("Shop.Data.CategoryProduct", "CategoryProduct")
-                        .WithMany()
-                        .HasForeignKey("CategoryProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
