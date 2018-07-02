@@ -24,7 +24,7 @@ namespace Shop.Data
         public string Display { get; set; }
 
         [Display(Name = "Image Url")]
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; set; }// /files/'tenfile.' <img src='' />
 
         [Display(Name = "Created Date")]
         public DateTime CreatedDate { get; set; }
