@@ -62,7 +62,7 @@
                                 @Html.DisplayFor(modelItem => item.Quantity)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.ImageUrl)
+                                <img src="~/files/@item.ImageUrl" height="70" />
                             </td>
                             <td>@item.CreatedDate.ToString("dd-MM-yyyy H:mm:ss")</td>
                             <td>@item.ModifiedDate.ToString("dd-MM-yyyy H:mm:ss")</td>

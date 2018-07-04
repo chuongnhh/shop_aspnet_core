@@ -1972,6 +1972,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="wwwroot\files\" />
     <Folder Include="wwwroot\themes\less\oregional\" />
   </ItemGroup>
 
