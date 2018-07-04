@@ -15,9 +15,7 @@
                 }
                 @await Component.InvokeAsync("Category")
                 <br />
-                @{
-                    Html.RenderPartial("_LastestProductPartialView");
-                }
+                @await Component.InvokeAsync("LastestProduct")
             </div>
             <!-- Sidebar end=============================================== -->
             <div class="span9">

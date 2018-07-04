@@ -1,0 +1,30 @@
+﻿
+@model List<Shop.Data.Product>
+
+@foreach (var item in Model) {
+    <div class="thumbnail">
+        <img src="/files/@item.ImageUrl" alt="@item.Name" />
+        <div class="caption">
+            <h5>@item.Name</h5>
+            <h4 style="text-align:center">
+                <a class="btn" asp-action="Details" asp-controller="SpecialsOffer">
+                    <i class="icon-zoom-in"></i>
+                </a>
+                <a class="btn" href="#">
+                    Add to
+                    <i class="icon-shopping-cart"></i>
+                </a>
+                <a class="btn btn-primary" href="#">@item.Price</a>
+            </h4>
+        </div>
+    </div>
+    <br />
+}
+
+
+<div class="thumbnail">
+    <img src="~/themes/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
+    <div class="caption">
+        <h5>Payment Methods</h5>
+    </div>
+</div>
