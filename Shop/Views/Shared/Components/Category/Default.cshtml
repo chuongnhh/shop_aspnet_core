@@ -1,0 +1,20 @@
+﻿
+@model List<Shop.Data.GroupProduct>
+
+<ul id="sideManu" class="nav nav-tabs nav-stacked">
+    @foreach (var group in Model) {
+        <li class="subMenu">
+            <a> @group.Name [@group.CategoryProducts.Count()]</a>
+            <ul style="display:none">
+                @foreach (var category in group.CategoryProducts) {
+                    <li>
+                        <a class="" asp-action="Details" asp-controller="Category" asp-route-id="@category.Id">
+                            <i class="icon-chevron-right"></i>@category.Name [@category.Products.Count()]
+                        </a>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+
+</ul>

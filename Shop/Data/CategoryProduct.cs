@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace Shop.Data {
     public class CategoryProduct {
+
+
+        public CategoryProduct() {
+            Products = new List<Product>();
+        }
         [Key]
         public int Id { get; set; }
         [Display(Name = "Category Name")]
@@ -22,5 +27,7 @@ namespace Shop.Data {
         public int GroupProductId { get; set; }
         [ForeignKey("GroupProductId")]
         public virtual GroupProduct GroupProduct { get; set; }
+
+        public virtual IList<Product> Products { get; set; }
     }
 }
