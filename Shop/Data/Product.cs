@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,8 +32,15 @@ namespace Shop.Data
         [Display(Name = "Modified Date")]
         public DateTime ModifiedDate { get; set; }
 
-        [Display(Name="Category Product")]
+        [Display(Name = "Category Product")]
         public int CategoryProductId { get; set; }
         public virtual CategoryProduct CategoryProduct { get; set; }
+
+        public string PriceCurency()
+        {
+            CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");   // try with "en-US"
+            string a = Price.ToString("#,### đ", cul.NumberFormat);
+            return a;
+        }
     }
 }

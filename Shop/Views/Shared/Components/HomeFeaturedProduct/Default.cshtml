@@ -1,0 +1,38 @@
+﻿
+@model List<Shop.Data.CategoryProduct>
+
+
+<div class="row-fluid">
+    <div id="featured" class="carousel slide">
+        <div class="carousel-inner">
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <div class="item @(i==0?"active":"")">
+                    <ul class="thumbnails">
+                        @foreach (var product in Model[i].Products.OrderByDescending(x => x.CreatedDate).Take(4))
+                        {
+                            <li class="span3">
+                                <div class="thumbnail">
+                                    <i class="tag"></i>
+                                    <a asp-action="Details" asp-controller="SpecialsOffer" asp-route-id="@product.Id">
+                                        <img src="~/files/@product.ImageUrl" alt="">
+                                    </a>
+                                    <div class="caption">
+                                        <h5>@product.Name</h5>
+                                        <h4>
+                                            <a class="btn" asp-action="Details" asp-controller="SpecialsOffer" asp-route-id="@product.Id">VIEW</a>
+                                            <span class="pull-right">@product.PriceCurency()</span>
+                                        </h4>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+            }
+        </div>
+        <a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
+        <a class="right carousel-control" href="#featured" data-slide="next">›</a>
+    </div>
+</div>

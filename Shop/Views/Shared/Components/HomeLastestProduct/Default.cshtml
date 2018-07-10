@@ -1,0 +1,32 @@
+﻿
+@model List<Shop.Data.Product>
+
+<ul class="thumbnails">
+    @foreach (var item in Model)
+    {
+        <li class="span3">
+            <div class="thumbnail">
+                <a asp-action="Details" asp-controller="SpecialsOffer" asp-route-id="@item.Id">
+                    <img src="~/files/@item.ImageUrl" alt="" />
+                </a>
+                <div class="caption">
+                    <h5>@item.Name</h5>
+                    <p>
+                        @item.Display
+                    </p>
+
+                    <h4 style="text-align:center">
+                        <a class="btn" asp-action="Details" asp-controller="SpecialsOffer" asp-route-id="@item.Id">
+                            <i class="icon-zoom-in"></i>
+                        </a>
+                        <a class="btn" asp-action="Details" asp-controller="SpecialsOffer" asp-route-id="@item.Id">
+                            Add to
+                            <i class="icon-shopping-cart"></i>
+                        </a>
+                        <a class="btn btn-primary" asp-action="Details" asp-controller="SpecialsOffer" asp-route-id="@item.Id">@item.PriceCurency()</a>
+                    </h4>
+                </div>
+            </div>
+        </li>
+    }
+</ul>
