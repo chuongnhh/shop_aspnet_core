@@ -1,4 +1,10 @@
-﻿<div id="header">
+﻿@using Microsoft.AspNetCore.Identity
+@using Shop.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<div id="header">
     <div class="container">
         <div id="welcomeLine" class="row">
             <div class="span6">
@@ -42,7 +48,7 @@
                 </a>
                 <form class="form-inline navbar-search" method="post" action="products.html">
                     <input id="srchFld" class="srchTxt" type="text" />
-                    <select class="srchTxt">
+                    <select class="srchTxt" style="max-width:130px">
                         <option>All</option>
                         <option>CLOTHES </option>
                         <option>FOOD AND BEVERAGES </option>
@@ -62,14 +68,41 @@
                     <li class="">
                         <a asp-action="Index" asp-controller="Contact">Contact</a>
                     </li>
-                    <li class="">
-                        <a href="#login" role="button" data-toggle="modal" style="padding-right:0">
-                            <span class="btn btn-large btn-success">Login</span>
-                        </a>
-                        @{ 
-                            Html.RenderPartial("_LoginPartialView");
-                        }
-                    </li>
+
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li class="">
+                            <a href="javascript:void(0)" style="padding-right:0">
+                                <span class="btn btn-xs btn-warning">@UserManager.GetUserName(User)</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit();" style="padding-right:0">
+                                <span class="btn btn-xs btn-warning">Log out</span>
+                            </a>
+                            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right"></form>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="">
+                            <a href="#login" role="button" data-toggle="modal" style="padding-right:0">
+                                <span class="btn btn-xs btn-success">Login</span>
+                            </a>
+                            @{
+                                Html.RenderPartial("_LoginPartialView");
+                            }
+                        </li>
+                        <li class="">
+                            <a href="#register" role="button" data-toggle="modal" style="padding-right:0">
+                                <span class="btn btn-xs btn-danger">Register</span>
+                            </a>
+                            @{
+                                Html.RenderPartial("_RegisterPartialView");
+                            }
+                        </li>
+                    }
+
                 </ul>
             </div>
         </div>

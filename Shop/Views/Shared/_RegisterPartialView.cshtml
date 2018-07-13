@@ -1,10 +1,10 @@
-﻿<div id="login" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
+﻿<div id="register" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="register" aria-hidden="false">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3>Login System</h3>
+        <h3>Register User</h3>
     </div>
     <div class="modal-body">
-        <form class="form-horizontal loginFrm" asp-action="Login" asp-controller="Account">
+        <form class="form-horizontal registerFrm" asp-action="Register" asp-controller="Account">
             <div class="control-group">
                 <input type="text" name="Email" id="Email" placeholder="Email">
             </div>
@@ -12,11 +12,9 @@
                 <input type="password" name="Password" id="Password" placeholder="Password">
             </div>
             <div class="control-group">
-                <label class="checkbox">
-                    <input name="RememberMe" id="RememberMe" type="checkbox"> Remember me
-                </label>
+                <input type="password" name="ConfirmPassword" id="ConfirmPassword" placeholder="Password">
             </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
+            <button type="submit" class="btn btn-success">Register</button>
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
         </form>
     </div>
