@@ -7,10 +7,19 @@
 <div id="header">
     <div class="container">
         <div id="welcomeLine" class="row">
-            <div class="span6">
-                Welcome!
-                <strong> User</strong>
-            </div>
+            @if (SignInManager.IsSignedIn(User))
+            {<div class="span6">
+                    Welcome!
+                    <strong> @UserManager.GetUserName(User)</strong>
+                </div>
+            }
+            else
+            {
+                <div class="span6">
+                    You're
+                    <strong> not login</strong>
+                </div>
+            }
             <div class="span6">
                 <div class="pull-right">
                     <a href="product_summary.html">
@@ -73,12 +82,12 @@
                     {
                         <li class="">
                             <a href="javascript:void(0)" style="padding-right:0">
-                                <span class="btn btn-xs btn-warning">@UserManager.GetUserName(User)</span>
+                                <span class="btn btn-xs btn-success">@UserManager.GetUserName(User)</span>
                             </a>
                         </li>
                         <li class="">
                             <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit();" style="padding-right:0">
-                                <span class="btn btn-xs btn-warning">Log out</span>
+                                <span class="btn btn-xs btn-danger">Log out</span>
                             </a>
                             <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right"></form>
                         </li>
@@ -89,17 +98,13 @@
                             <a href="#login" role="button" data-toggle="modal" style="padding-right:0">
                                 <span class="btn btn-xs btn-success">Login</span>
                             </a>
-                            @{
-                                Html.RenderPartial("_LoginPartialView");
-                            }
+                            @await Component.InvokeAsync("Login")
                         </li>
                         <li class="">
                             <a href="#register" role="button" data-toggle="modal" style="padding-right:0">
                                 <span class="btn btn-xs btn-danger">Register</span>
                             </a>
-                            @{
-                                Html.RenderPartial("_RegisterPartialView");
-                            }
+                            @await Component.InvokeAsync("Register")
                         </li>
                     }
 
