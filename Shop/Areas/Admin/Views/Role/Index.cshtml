@@ -1,0 +1,115 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@{ Html.RenderPartial("_PageHeaderPartialView");}
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">List Role</h3>
+        </div>
+        <div class="box-body">
+            <p>
+                <a class="btn btn-success" asp-action="Details">Create New</a>
+            </p>
+            <table class="table data-table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NormalizedName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ConcurrencyStamp)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr id="tr-item-@item.Id">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NormalizedName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ConcurrencyStamp)
+                            </td>
+                            <td class="text-center">
+                                <a class="btn btn-warning btn-xs" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-danger btn-xs" onclick="deleteItem('@item.Id')" href="javascript:void(0)"><i class="fa fa-trash-o"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+
+</section>
+<!-- /.content -->
+
+
+@section styles{
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <!-- Theme style -->
+}
+@section scripts{
+    <!-- DataTables -->
+    <script src="~/admin/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/admin/js/bootbox.min.js"></script>
+    <script>
+        $(function () {
+            $('.data-table').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            });
+        });
+
+        function deleteItem(id) {
+            bootbox.confirm({
+                title: "Delete item?",
+                message: "Do you want to delete item now? This cannot be undone.",
+                buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Cancel'
+                    },
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> Continue'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        $.post('/admin/role/delete', { id: id }, function (data) {
+                            if (data.success == 1) {
+                                $('#tr-item-' + id).remove();
+                            }
+                        })
+                    }
+                }
+            });
+        }
+    </script>
+}

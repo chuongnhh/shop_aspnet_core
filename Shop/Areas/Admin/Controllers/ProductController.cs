@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,7 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Shop.Data;
 
 namespace Shop.Areas.Admin.Controllers {
+
     [Area("Admin")]
+    [Authorize(Roles = ("Mod,Admin"))]
     public class ProductController : Controller {
 
         private readonly ApplicationDbContext _context; 
@@ -19,6 +22,7 @@ namespace Shop.Areas.Admin.Controllers {
             _context = context;
         }
 
+        [Authorize]
         // GET: Admin/Product
         public async Task<IActionResult> Index() {
             return View(await _context.Products.Include(x => x.CategoryProduct).ToListAsync());

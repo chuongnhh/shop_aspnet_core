@@ -8,6 +8,7 @@ namespace Shop.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
+        public string Id { get; set; }
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

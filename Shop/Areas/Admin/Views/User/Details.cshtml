@@ -1,0 +1,76 @@
+﻿
+@using Microsoft.AspNetCore.Identity
+
+@model Shop.Models.AccountViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Details";
+    var roles = (List<IdentityRole>)ViewBag.Roles;
+    var userRoles = (List<IdentityUserRole<string>>)ViewBag.UserRoles;
+}
+
+@{ Html.RenderPartial("_PageHeaderPartialView");}
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Details User</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-action="Details">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input hidden asp-for="Id" />
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <select name="SelectRoles" id="SelectRoles" class="form-control select2" multiple>
+                                @foreach (var item in roles)
+                                {
+                                    if (userRoles.Any(x => x.RoleId == item.Id) == true)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Save changes" class="btn btn-warning" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+
+</section>
+<!-- /.content -->
+
+@section styles{
+    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
+}
+@section scripts{
+    <script src="~/lib/select2/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".select2").select2();
+        })
+    </script>
+}
