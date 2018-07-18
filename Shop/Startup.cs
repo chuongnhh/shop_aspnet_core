@@ -35,6 +35,16 @@ namespace Shop
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+            });
+
             services.AddMvc();
         }
 
@@ -55,7 +65,7 @@ namespace Shop
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
 
