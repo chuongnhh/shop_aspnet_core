@@ -1,4 +1,4 @@
-﻿@model LoginViewModel
+﻿@*@model LoginViewModel*@
 <div id="login" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -7,15 +7,15 @@
     <div class="modal-body">
         <form class="form-horizontal loginFrm" asp-action="Login" asp-controller="Account">
             <div class="control-group">
-                <input type="text" asp-for="Email" placeholder="Email">
+                <input type="text" name="Email" @*asp-for="Email"*@ placeholder="Email">
             </div>
             <div class="control-group">
-                <input type="password" asp-for="Password" placeholder="Password">
+                <input type="password" name="Password" @*asp-for="Password"*@ placeholder="Password">
             </div>
             <div class="control-group">
                 <label class="checkbox">
 
-                    <input asp-for="RememberMe" type="checkbox"> Remember me
+                    <input name="RememberMe" @*asp-for="RememberMe"*@ type="checkbox"> Remember me
                 </label>
             </div>
             <button type="submit" class="btn btn-success">Sign in</button>

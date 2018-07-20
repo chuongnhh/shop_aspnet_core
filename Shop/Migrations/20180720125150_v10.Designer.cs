@@ -11,9 +11,10 @@ using System;
 namespace Shop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180720125150_v10")]
+    partial class v10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,8 +207,6 @@ namespace Shop.Migrations
                     b.Property<int>("CartId");
 
                     b.Property<int>("ProductId");
-
-                    b.Property<int>("Quantity");
 
                     b.Property<string>("UserId");
 

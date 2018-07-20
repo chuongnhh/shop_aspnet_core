@@ -19,5 +19,8 @@ namespace Shop.Data
         public virtual DbSet<GroupProduct> GroupProducts { get; set; }
         public virtual DbSet<CategoryProduct> CategoryProducts { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Cart> Carts { get; set; }
     }
 }

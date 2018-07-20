@@ -1,0 +1,20 @@
+﻿@model CartViewModels
+
+@if (string.IsNullOrEmpty(Model.Status))
+{
+    <div class="well well-small">
+        <a id="myCart" asp-action="Cart" asp-controller="User">
+            <img id="cart-items-count" src="~/themes/images/ico-cart.png" alt="cart">@Model.ItemsCount Items in your cart
+            <span id="cart-total" class="badge badge-warning pull-right">@Model.TotalCurency()</span>
+        </a>
+    </div>
+}
+else
+{
+    <div class="well well-small">
+        <a id="myCart" asp-action="Cart" asp-controller="User">
+            <img id="cart-items-count" src="~/themes/images/ico-cart.png" alt="cart">@Model.Status
+            <span id="cart-total" class="badge badge-warning pull-right" style="display:none"></span>
+        </a>
+    </div>
+}

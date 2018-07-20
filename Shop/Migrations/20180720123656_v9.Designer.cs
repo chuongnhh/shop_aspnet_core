@@ -11,9 +11,10 @@ using System;
 namespace Shop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180720123656_v9")]
+    partial class v9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,30 +129,6 @@ namespace Shop.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Shop.Data.Cart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("CustomerAddress");
-
-                    b.Property<string>("CustomerEmail");
-
-                    b.Property<string>("CustomerName");
-
-                    b.Property<string>("CustomerPhoneNumber");
-
-                    b.Property<string>("Status");
-
-                    b.Property<decimal>("Total");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Carts");
-                });
-
             modelBuilder.Entity("Shop.Data.CategoryProduct", b =>
                 {
                     b.Property<int>("Id")
@@ -194,32 +171,6 @@ namespace Shop.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("GroupProducts");
-                });
-
-            modelBuilder.Entity("Shop.Data.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Buy");
-
-                    b.Property<int>("CartId");
-
-                    b.Property<int>("ProductId");
-
-                    b.Property<int>("Quantity");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Shop.Data.Product", b =>
@@ -366,23 +317,6 @@ namespace Shop.Migrations
 
             modelBuilder.Entity("Shop.Data.GroupProduct", b =>
                 {
-                    b.HasOne("Shop.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Shop.Data.Order", b =>
-                {
-                    b.HasOne("Shop.Data.Cart", "Cart")
-                        .WithMany("Orders")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Shop.Data.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Shop.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
