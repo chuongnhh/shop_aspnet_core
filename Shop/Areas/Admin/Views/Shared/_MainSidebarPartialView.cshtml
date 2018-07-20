@@ -27,6 +27,25 @@
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">USER MANAGEMENT</li>
+            <li>
+                <a asp-action="Index" asp-controller="User">
+                    <i class="fa fa-th"></i>
+                    <span>List User</span>
+                    <span class="pull-right-container">
+                        <small class="label pull-right bg-green">New</small>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a asp-action="Index" asp-controller="Role">
+                    <i class="fa fa-th"></i>
+                    <span>List Role</span>
+                    <span class="pull-right-container">
+                        <small class="label pull-right bg-green">New</small>
+                    </span>
+                </a>
+            </li>
             <li class="header">MAIN NAVIGATION</li>
 
             <li>
@@ -38,6 +57,7 @@
                     </span>
                 </a>
             </li>
+
             <li>
                 <a asp-action="Index" asp-controller="CategoryProduct">
                     <i class="fa fa-th"></i>

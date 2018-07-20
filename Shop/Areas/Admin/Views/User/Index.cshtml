@@ -7,6 +7,9 @@
 
     var roles = (List<IdentityRole>)ViewBag.Roles;
     var userRoles = (List<IdentityUserRole<string>>)ViewBag.UserRoles;
+
+    var employees = Model.Where(x => userRoles.Any(z => z.UserId == x.Id)).ToList();
+    var customers = Model.Except(employees).ToList();
 }
 
 
@@ -18,57 +21,124 @@
     <!-- Default box -->
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title">List Role</h3>
+            <h3 class="box-title">List User</h3>
         </div>
         <div class="box-body">
-            <p>
-                <a class="btn btn-success" asp-action="Details">Create New</a>
-            </p>
-            <table class="table data-table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UserName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Email)
-                        </th>
-                        <th>
-                           Roles
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr id="tr-item-@item.Id">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UserName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Email)
-                            </td>
-                            <td>
-                                @foreach (var r in roles)
+            <!-- Custom Tabs -->
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab_1" data-toggle="tab">Employee</a>
+                    </li>
+                    <li>
+                        <a href="#tab_2" data-toggle="tab">Customer</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1">
+                        <p>
+                            <a class="btn btn-success" asp-action="Details">Create New</a>
+                        </p>
+                        <table class="table data-table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.UserName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Email)
+                                    </th>
+                                    <th>
+                                        Roles
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in employees)
                                 {
-                                    var myRoles = userRoles.Where(x => x.UserId == item.Id).ToList();
+                                    <tr id="tr-item-@item.Id">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UserName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Email)
+                                        </td>
+                                        <td>
+                                            @foreach (var r in roles)
+                                            {
+                                                var myRoles = userRoles.Where(x => x.UserId == item.Id).ToList();
 
-                                    if (myRoles.Any(x => x.RoleId == r.Id))
-                                    {
-                                        <a href="javascript:void(0)" class="label label-success active btn-sm role"> @r.Name</a>
-                                    }
+                                                if (myRoles.Any(x => x.RoleId == r.Id))
+                                                {
+                                                    <a href="javascript:void(0)" class="label label-success active btn-sm role"> @r.Name</a>
+                                                }
+                                            }
+
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="btn btn-warning btn-xs" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
+                                            <a class="btn btn-danger btn-xs" onclick="deleteItem('@item.Id')" href="javascript:void(0)"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
                                 }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="tab_2">
+                        <table class="table data-table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.UserName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Email)
+                                    </th>
+                                    <th>
+                                        Roles
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in customers)
+                                {
+                                    <tr id="tr-item-@item.Id">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UserName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Email)
+                                        </td>
+                                        <td>
+                                            @foreach (var r in roles)
+                                            {
+                                                var myRoles = userRoles.Where(x => x.UserId == item.Id).ToList();
 
-                            </td>
-                            <td class="text-center">
-                                <a class="btn btn-warning btn-xs" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
-                                <a class="btn btn-danger btn-xs" onclick="deleteItem('@item.Id')" href="javascript:void(0)"><i class="fa fa-trash-o"></i></a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                                if (myRoles.Any(x => x.RoleId == r.Id))
+                                                {
+                                                    <a href="javascript:void(0)" class="label label-success active btn-sm role"> @r.Name</a>
+                                                }
+                                            }
+
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="btn btn-warning btn-xs" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
+                                            <a class="btn btn-danger btn-xs" onclick="deleteItem('@item.Id')" href="javascript:void(0)"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+                <!-- /.tab-content -->
+            </div>
+            <!-- nav-tabs-custom -->
         </div>
         <!-- /.box-body -->
     </div>

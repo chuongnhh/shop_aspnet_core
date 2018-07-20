@@ -31,22 +31,28 @@
                         <th>
                             @Html.DisplayNameFor(model => model.ModifiedDate)
                         </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.User)
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model) {
-                        <tr id="tr-item-@item.Id">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>@item.CreatedDate.ToString("dd-MM-yyyy H:mm:ss")</td>
-                            <td>@item.ModifiedDate.ToString("dd-MM-yyyy H:mm:ss")</td>
-                            <td class="text-center">
-                                <a class="btn btn-warning btn-xs" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
-                                <a class="btn btn-danger btn-xs" onclick="deleteItem('@item.Id')" href="javascript:void(0)"><i class="fa fa-trash-o"></i></a>
-                            </td>
-                        </tr>
+                    <tr id="tr-item-@item.Id">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>@item.CreatedDate.ToString("dd-MM-yyyy H:mm:ss")</td>
+                        <td>@item.ModifiedDate.ToString("dd-MM-yyyy H:mm:ss")</td>
+                        <td>
+                            @item.User?.UserName
+                        </td>
+                        <td class="text-center">
+                            <a class="btn btn-warning btn-xs" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
+                            <a class="btn btn-danger btn-xs" onclick="deleteItem('@item.Id')" href="javascript:void(0)"><i class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>

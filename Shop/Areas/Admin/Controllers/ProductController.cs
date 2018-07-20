@@ -5,10 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shop.Data;
+using Shop.Models;
 
 namespace Shop.Areas.Admin.Controllers {
 
@@ -16,16 +18,19 @@ namespace Shop.Areas.Admin.Controllers {
     [Authorize(Roles = ("Mod,Admin"))]
     public class ProductController : Controller {
 
-        private readonly ApplicationDbContext _context; 
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProductController(ApplicationDbContext context) {
+        public ProductController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager) {
             _context = context;
+            _userManager = userManager;
         }
 
         [Authorize]
         // GET: Admin/Product
         public async Task<IActionResult> Index() {
-            return View(await _context.Products.Include(x => x.CategoryProduct).ToListAsync());
+            return View(await _context.Products.Include(x => x.CategoryProduct).Include(x=>x.User).ToListAsync());
         }
 
 
@@ -75,7 +80,7 @@ namespace Shop.Areas.Admin.Controllers {
                 if (ProductExists(id) == false) {
 
                     model.CreatedDate = DateTime.Now;
-
+                    model.UserId = _userManager.GetUserId(HttpContext.User);
                     if (string.IsNullOrEmpty(fileName) == false) {
                         model.ImageUrl = fileName;
                     }
@@ -93,7 +98,7 @@ namespace Shop.Areas.Admin.Controllers {
                     product.Display = model.Display;
                     product.Description = model.Description;
                     product.ModifiedDate = DateTime.Now;
-
+                    product.UserId = _userManager.GetUserId(HttpContext.User);
                     if (string.IsNullOrEmpty(fileName) == false) {
                         product.ImageUrl = fileName;
                     }

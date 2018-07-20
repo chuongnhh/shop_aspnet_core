@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shop.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,6 +18,9 @@ namespace Shop.Data {
         public DateTime CreatedDate { get; set; }
         [Display(Name = "Modified Date")]
         public DateTime ModifiedDate { get; set; }
+
+        public string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public virtual IList<CategoryProduct> CategoryProducts { get; set; }
     }

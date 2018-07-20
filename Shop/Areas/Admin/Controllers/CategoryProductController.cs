@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shop.Data;
+using Shop.Models;
 
 namespace Shop.Areas.Admin.Controllers {
     [Area("Admin")]
@@ -15,14 +17,17 @@ namespace Shop.Areas.Admin.Controllers {
     public class CategoryProductController : Controller {
 
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CategoryProductController(ApplicationDbContext context) {
+        public CategoryProductController(ApplicationDbContext context, 
+            UserManager<ApplicationUser> userManager) {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Admin/CategoryProduct
         public async Task<IActionResult> Index() {
-            return View(await _context.CategoryProducts.Include(x => x.GroupProduct).ToListAsync());
+            return View(await _context.CategoryProducts.Include(x=>x.User).Include(x => x.GroupProduct).ToListAsync());
         }
 
         // GET: Admin/CategoryProduct/Edit/5
@@ -50,6 +55,7 @@ namespace Shop.Areas.Admin.Controllers {
                 if (CategoryProductExists(id) == false) {
 
                     model.CreatedDate = DateTime.Now;
+                    model.UserId = _userManager.GetUserId(HttpContext.User);
                     _context.Add(model);
                     await _context.SaveChangesAsync();
 
@@ -59,6 +65,7 @@ namespace Shop.Areas.Admin.Controllers {
                     category.GroupProductId = model.GroupProductId;
                     category.Name = model.Name;
                     category.ModifiedDate = DateTime.Now;
+                    category.UserId = _userManager.GetUserId(HttpContext.User);
 
                     _context.Update(category);
                     await _context.SaveChangesAsync();

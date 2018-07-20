@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shop.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -27,6 +28,9 @@ namespace Shop.Data {
         public int GroupProductId { get; set; }
         [ForeignKey("GroupProductId")]
         public virtual GroupProduct GroupProduct { get; set; }
+
+        public string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public virtual IList<Product> Products { get; set; }
     }

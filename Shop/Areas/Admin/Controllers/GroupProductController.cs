@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shop.Data;
+using Shop.Models;
 
 namespace Shop.Areas.Admin.Controllers {
     [Area("Admin")]
@@ -14,14 +16,17 @@ namespace Shop.Areas.Admin.Controllers {
     public class GroupProductController : Controller {
 
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GroupProductController(ApplicationDbContext context) {
+        public GroupProductController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager) {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Admin/GroupProduct
         public async Task<IActionResult> Index() {
-            return View(await _context.GroupProducts.ToListAsync());
+            return View(await _context.GroupProducts.Include(x => x.User).ToListAsync());
         }
 
         // GET: Admin/GroupProduct/Edit/5
@@ -48,6 +53,7 @@ namespace Shop.Areas.Admin.Controllers {
                 if (GroupProductExists(id) == false) {
 
                     model.CreatedDate = DateTime.Now;
+                    model.UserId = _userManager.GetUserId(HttpContext.User);
                     _context.Add(model);
                     await _context.SaveChangesAsync();
 
@@ -56,7 +62,7 @@ namespace Shop.Areas.Admin.Controllers {
 
                     group.Name = model.Name;
                     group.ModifiedDate = DateTime.Now;
-
+                    group.UserId = _userManager.GetUserId(HttpContext.User);
                     _context.Update(group);
                     await _context.SaveChangesAsync();
                 }
