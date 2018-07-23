@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Shop.Data;
+using Shop.Extensions;
 using Shop.Models;
 
 namespace Shop.Controllers
@@ -42,10 +46,13 @@ namespace Shop.Controllers
         {
             if (User.Identity.IsAuthenticated == true)
             {
+
+                var user = await _userManager.GetUserAsync(HttpContext.User);
                 // User logined
                 var cart = _context.Carts
-                    .SingleOrDefault(x => string.IsNullOrEmpty(x.Status));
-                var user = await _userManager.GetUserAsync(HttpContext.User);
+                    .SingleOrDefault(x => string.IsNullOrEmpty(x.Status) &&
+                    x.UserId == user.Id);
+
                 if (cart == null)
                 {
                     // Create cart
@@ -54,6 +61,7 @@ namespace Shop.Controllers
                         CreatedDate = DateTime.Now,
                         CustomerName = user.UserName,
                         CustomerEmail = user.Email,
+                        UserId = user.Id,
                         Total = 0,
                         Status = null,
                         CustomerPhoneNumber = user.PhoneNumber
@@ -70,13 +78,99 @@ namespace Shop.Controllers
                     Buy = false
                 };
                 _context.Entry(order).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+
                 await _context.SaveChangesAsync();
+                var models = _context.Carts
+                .Include(x => x.Orders)
+                .ThenInclude(x => x.Product)
+                .SingleOrDefault(x => string.IsNullOrEmpty(x.Status) &&
+                x.UserId == user.Id);
+                if (models != null)
+                {
+                    var cartViewModels = new CartViewModels
+                    {
+                        Id = models.Id,
+                        ItemsCount = models.Orders.Count,
+                        Total = models.Orders.Sum(x => x.GetTotal()),
+                        Status = null
+                    };
+
+                    return Json(new
+                    {
+                        success = 1,
+                        itemCount = cartViewModels.ItemsCount,
+                        total = cartViewModels.TotalCurency()
+                    });
+                }
             }
             else
             {
-                // User not logined
+                if (HttpContext.Session.GetString("SESSION_CART") == null || string.IsNullOrEmpty(HttpContext.Session.GetString("SESSION_CART")) == true)
+                {
+                    // Create cart
+                    var cart = new Cart
+                    {
+                        CreatedDate = DateTime.Now,
+                        Total = 0,
+                        Status = null,
+                    };
+                    // Create order
+                    var order = new Order
+                    {
+                        ProductId = model.Id,
+                        CartId = cart.Id,
+                        Quantity = model.Quantity,
+                        Buy = false
+                    };
+                    cart.Orders.Add(order);
+                    HttpContext.Session.SetString("SESSION_CART", JsonConvert.SerializeObject(cart));
+                }
+                else
+                {
+                    var cart = JsonConvert.DeserializeObject<Cart>(HttpContext.Session.GetString("SESSION_CART"));
+                    // Create order
+                    var order = new Order
+                    {
+                        ProductId = model.Id,
+                        CartId = cart.Id,
+                        Quantity = model.Quantity,
+                        Buy = false
+                    };
+                    cart.Orders.Add(order);
+                    HttpContext.Session.SetString("SESSION_CART", JsonConvert.SerializeObject(cart));
+                }
+
+
+                var models = JsonConvert.DeserializeObject<Cart>(HttpContext.Session.GetString("SESSION_CART"));
+                foreach (var item in models.Orders)
+                {
+                    var p = _context.Products.SingleOrDefault(x => x.Id == item.ProductId);
+                    if (p != null)
+                    {
+                        item.Product = p;
+                    }
+                }
+                if (models != null)
+                {
+                    var cartViewModels = new CartViewModels
+                    {
+                        Id = models.Id,
+                        ItemsCount = models.Orders.Count,
+                        Total = models.Orders.Sum(x => x.GetTotal()),
+                        Status = null
+                    };
+
+                    return Json(new
+                    {
+                        success = 1,
+                        itemCount = cartViewModels.ItemsCount,
+                        total = cartViewModels.TotalCurency()
+                    });
+                }
             }
-            return Json(new { success = 1 });
+
+
+            return Json(new { success = 0, message = "Error" });
         }
     }
 }

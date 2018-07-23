@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shop.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,6 +9,10 @@ namespace Shop.Data
 {
     public class Cart
     {
+        public Cart()
+        {
+            Orders = new List<Order>();
+        }
         [Key]
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -22,5 +27,9 @@ namespace Shop.Data
         public string CustomerPhoneNumber { get; set; }
 
         public virtual List<Order> Orders { get; set; }
+
+        public string UserId { get; set; }
+
+        public virtual ApplicationUser User { get; set; }
     }
 }

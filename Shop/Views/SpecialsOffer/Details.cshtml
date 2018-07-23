@@ -48,7 +48,7 @@
                                     <span>@Model.PriceCurency()</span>
                                 </label>
                                 <div class="controls">
-                                    <input name="Quantity" type="number" class="span1" placeholder="Qty." />
+                                    <input name="Quantity" id="Quantity" type="number" class="span1" placeholder="Qty." />
                                     <button type="button" onclick="addToCart('@Model.Id')" class="btn btn-large btn-primary pull-right">
                                         Add to cart
                                         <i class=" icon-shopping-cart"></i>
@@ -182,12 +182,35 @@
 </div>
 
 @section scripts{
+    <script src="~/admin/js/bootbox.min.js"></script>
     <script>
-        function addToCart(id){
-            var id=id;
-            var qty=$('#Quantity').val();
-           $.post('/SpecialsOffer/AddToCart',{Id:id,Quantity:qty},function(data){
-                   alert('xxxx');
+        function addToCart(id) {
+            var id = id;
+            var qty = $('#Quantity').val();
+            $.post('/SpecialsOffer/AddToCart', { Id: id, Quantity: qty }, function (data) {
+                console.log(data);
+                if (data.success == 1) {
+                    $('#cart-items-count').html(data.itemCount + ' Items in your cart');
+                    $('#cart-total').html(data.total);
+                    $('#cart-total').show();
+                    bootbox.confirm({
+                        title: "Add product to cart success",
+                        message: "This product have been add to cart!",
+                        buttons: {
+                            cancel: {
+                                label: '<i class="fa fa-times"></i> Continue'
+                            },
+                            confirm: {
+                                label: '<i class="fa fa-check"></i> Payment'
+                            }
+                        },
+                        callback: function (result) {
+                            if (result == true) {
+                                window.location.href = '/user/cart';
+                            }
+                        }
+                    });
+                }
             });
         }
     </script>
