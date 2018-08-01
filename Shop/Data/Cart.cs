@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,5 +32,14 @@ namespace Shop.Data
         public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }
+
+        public string TotalPriceCurency()
+        {
+            CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");   // try with "en-US"
+            string a = this.Orders.Where(x=>x.Buy==true)
+                .Sum(x=>x.GetTotal())
+                .ToString("#,### đ", cul.NumberFormat);
+            return a;
+        }
     }
 }

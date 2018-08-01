@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,6 +33,13 @@ namespace Shop.Data
         public double GetTotal()
         {
             return Product.Price * Quantity;
+        }
+
+        public string TotalPriceCurency()
+        {
+            CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");   // try with "en-US"
+            string a = GetTotal().ToString("#,### đ", cul.NumberFormat);
+            return a;
         }
     }
 }
