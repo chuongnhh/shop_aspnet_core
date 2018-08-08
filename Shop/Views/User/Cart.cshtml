@@ -82,7 +82,14 @@
                         </tr>
                     </tbody>
                 </table>
-                <a class="btn btn-success pull-right btn-lg">Payment now</a>
+                @if (User.Identity.IsAuthenticated == true)
+                {
+                    <a class="btn btn-success pull-right btn-lg" href="/User/Payment">Payment now</a>
+                }
+                else
+                {
+                    <a href="#login" role="button" data-toggle="modal" class="btn btn-success pull-right btn-lg">Payment now</a>
+                }
                 <a class="btn btn-danger pull-right btn-lg" id="remove-order">Remove</a>
             </div>
         </div>

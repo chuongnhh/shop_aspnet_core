@@ -117,6 +117,7 @@ namespace Shop.Controllers
                     // Create order
                     var order = new Order
                     {
+                        Id = 1,
                         ProductId = model.Id,
                         CartId = cart.Id,
                         Quantity = model.Quantity,
@@ -131,6 +132,7 @@ namespace Shop.Controllers
                     // Create order
                     var order = new Order
                     {
+                        Id = cart.Orders.Count() + 1,
                         ProductId = model.Id,
                         CartId = cart.Id,
                         Quantity = model.Quantity,

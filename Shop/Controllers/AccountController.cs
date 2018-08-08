@@ -82,11 +82,30 @@ namespace Shop.Controllers
                           .ThenInclude(x => x.Product)
                           .SingleOrDefault(x => string.IsNullOrEmpty(x.Status) &&
                           x.UserId == user.Id);
-
+                        if (myCart == null)
+                        {
+                            myCart = new Cart
+                            {
+                                UserId = user.Id,
+                                CreatedDate = DateTime.Now,
+                                Total = 0,
+                                Status = null,
+                            };
+                            _context.Entry(myCart).State = EntityState.Added;
+                        }
                         foreach (var item in cart.Orders)
                         {
-                            myCart.Orders.Add(item);
+                            var order = new Order
+                            {
+                                ProductId = item.Id,
+                                CartId = item.Id,
+                                Quantity = item.Quantity,
+                                Buy = item.Buy,
+                                UserId = user.Id
+                            };
+                            myCart.Orders.Add(order);
                         }
+                      
                         _context.SaveChanges();
                         HttpContext.Session.SetString("SESSION_CART", "");
                     }
